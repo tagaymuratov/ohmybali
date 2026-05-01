@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static i18n wagtailcore_tags wagtailimages_tags%}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+
+{% endblock %}
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+  <script src="{% static 'js/kzswiper.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto mt-32 mb-16 px-16">
+    <div>
+        {% image page.image original as img %}
+        <img src="{{ img.url }}" alt="" class="w-full h-full object-cover rounded-xl">
+    </div>
+    <div class="flex flex-col gap-4">
+        <h1 class="text-3xl font-semibold">{{ page.title }}</h1>
+        <p class="">от {{ page.price }} USD</p>
+        <p class="text-lg">{{ page.short_desc }}</p>
+        
+        <a href="#" class="w-fit px-4 py-2 bg-primary border rounded-lg hover:bg-[#BCB37D] transition-colors duration-300">ЗАБРОНИРОВАТЬ</a>
+    </div>
+
+</section>
+
+<section>
+    <div class="max-w-7xl mx-auto px-16">
+        <p>{{ page.text }}</p>
+    </div>
+</section>
+
+<section class="my-16">
+  <div class="swiper w-full h-[66vh] md:w-[calc(100%-128px)] mx-auto md:rounded-2xl [--swiper-navigation-color:#fff] [--swiper-pagination-color:#fff] [--swiper-scrollbar-drag-bg-color:#fff] [--swiper-scrollbar-bg-color:#000] [--swiper-navigation-size:24px]">
+    <div class="swiper-wrapper">
+      {% for photo in page.photos %}
+        <div class="swiper-slide">
+          {% image photo.value original class="w-full h-full object-cover" %}
+        </div>
+      {% endfor %}
+    </div>
+    <div class="swiper-button-prev drop-shadow-md hover:!text-black"></div>
+    <div class="swiper-button-next drop-shadow-md hover:!text-black"></div>
+    <div class="swiper-scrollbar"></div>
+  </div>
+</section>
+
+{% endblock content %}
