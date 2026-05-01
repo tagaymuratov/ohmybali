@@ -8,7 +8,7 @@ from wagtail.images.blocks import ImageChooserBlock
 
 class HomePage(Page):
     subpage_types = ["AboutUsPage", "TourCategoryPage"]
-    parent_page_types = []
+    parent_page_types = ['wagtailcore.Page']
     hero_image = models.ForeignKey(
         "wagtailimages.Image",
         blank=True,
