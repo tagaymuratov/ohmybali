@@ -63,9 +63,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Tailwind / frontend build output
-theme/static/css/dist/
-
 # Python cache and test output
 .pytest_cache/
 .mypy_cache/

@@ -3,38 +3,47 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
-
-{% endblock %}
-{% block extra_js %}
-  <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
-  <script src="{% static 'js/kzswiper.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-
-<section class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto mt-32 mb-16 px-16">
-    <div>
-        {% image page.image original as img %}
-        <img src="{{ img.url }}" alt="" class="w-full h-full object-cover rounded-xl">
-    </div>
-    <div class="flex flex-col gap-4">
+<section class="w-full rounded-t-2xl mt-32 pb-4 md:pt-4 {% cycle 'bg-secondary/90' 'bg-primary/90' as bg_style %}">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-7xl mx-auto px-4 py-4 md:px-16">
+      {% image page.image original as img %}
+      <img src="{{ img.url }}" alt="" class="w-full h-full object-cover rounded-xl">
+    <div id="tour-info" class="flex flex-col gap-4" data-price="{{ page.price }}" data-delta="{{ page.price_delta }}" data-max-people="{{ page.max_people }}">
         <h1 class="text-3xl font-semibold">{{ page.title }}</h1>
-        <p class="">от {{ page.price }} USD</p>
-        <p class="text-lg">{{ page.short_desc }}</p>
-        
-        <a href="#" class="w-fit px-4 py-2 bg-primary border rounded-lg hover:bg-[#BCB37D] transition-colors duration-300">ЗАБРОНИРОВАТЬ</a>
+        <p id="price">Стоимость: {{ page.price }} USD</p>
+        <div class="flex items-center justify-start">
+          <span>Количество гостей</span>
+          <div class="flex items-center space-x-4 ml-4">
+              <button id="decrease-guests" class="w-8 h-8 rounded-full border border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-secondary transition-all active:scale-95">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                  </svg>
+              </button>
+              <span id="guests-count" class="text-lg font-bold w-4 text-center">1</span>
+              <button id="increase-guests" class="w-8 h-8 rounded-full border border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-secondary transition-all active:scale-95">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                  </svg>
+              </button>
+          </div>
+        </div>
+        <p>{{ page.short_desc }}</p>
+        <a href="#" class="w-fit px-4 py-2 rounded-lg text-primary bg-secondary border border-primary hover:bg-primary hover:text-secondary transition-colors duration-300">ЗАБРОНИРОВАТЬ</a>
     </div>
-
+  </div>
 </section>
 
-<section>
-    <div class="max-w-7xl mx-auto px-16">
+<section class="w-full py-8 {% cycle bg_style %}">
+    <div class="max-w-7xl mx-auto px-4 md:px-16">
         <p>{{ page.text }}</p>
     </div>
 </section>
 
-<section class="my-16">
-  <div class="swiper w-full h-[66vh] md:w-[calc(100%-128px)] mx-auto md:rounded-2xl [--swiper-navigation-color:#fff] [--swiper-pagination-color:#fff] [--swiper-scrollbar-drag-bg-color:#fff] [--swiper-scrollbar-bg-color:#000] [--swiper-navigation-size:24px]">
+<section class="w-full py-8 {% cycle bg_style %}">
+  <h2 class="text-2xl font-semibold text-center mb-4">Фотографии с тура</h2>
+  <div class="swiper h-[66vh] w-[calc(100%-32px)] md:w-[calc(100%-128px)] mx-auto rounded-xl [--swiper-navigation-color:#fff] [--swiper-pagination-color:#fff] [--swiper-scrollbar-drag-bg-color:#fff] [--swiper-scrollbar-bg-color:#000] [--swiper-navigation-size:24px]">
     <div class="swiper-wrapper">
       {% for photo in page.photos %}
         <div class="swiper-slide">
@@ -42,10 +51,47 @@
         </div>
       {% endfor %}
     </div>
-    <div class="swiper-button-prev drop-shadow-md hover:!text-black"></div>
-    <div class="swiper-button-next drop-shadow-md hover:!text-black"></div>
+    <div class="swiper-button-prev drop-shadow-md hover:text-black!"></div>
+    <div class="swiper-button-next drop-shadow-md hover:text-black!"></div>
     <div class="swiper-scrollbar"></div>
   </div>
 </section>
-
 {% endblock content %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+  <script src="{% static 'js/kzswiper.js' %}"></script>
+  <script>
+    const decreaseBtn = document.getElementById('decrease-guests');
+    const increaseBtn = document.getElementById('increase-guests');
+    const guestsCount = document.getElementById('guests-count');
+    const price = document.getElementById('price');
+    const tourInfo = document.getElementById('tour-info');
+    const delta = parseInt(tourInfo.dataset.delta);
+    const tourPrice = parseInt(tourInfo.dataset.price);
+    const maxPeople = parseInt(tourInfo.dataset.maxPeople);
+
+    let count = parseInt(guestsCount.textContent);
+
+    decreaseBtn.addEventListener('click', () => {
+        if (count > 1) {
+            count--;
+            guestsCount.textContent = count;
+            updatePrice();
+        }
+    });
+
+    increaseBtn.addEventListener('click', () => {
+        if (count < maxPeople) {
+            count++;
+            guestsCount.textContent = count;
+            updatePrice();
+        }
+    });
+
+    function updatePrice() {
+        const totalPrice = tourPrice + (count - 1) * delta;
+        price.textContent = `Стоимость: ${totalPrice} USD`;
+    }
+  </script>
+{% endblock %}

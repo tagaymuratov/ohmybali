@@ -2,55 +2,91 @@
 {% load static i18n wagtailcore_tags wagtailimages_tags%}
 
 {% block content %}
-<section class="relative w-full h-screen flex items-center justify-center overflow-hidden">
-  {% image page.hero_image original as hero_img%}
-  <img src="{{ hero_img.url }}" alt="" class="absolute inset-0 w-full h-full object-cover -z-10">
-  <div class="absolute inset-0 bg-black/40 -z-9"></div>
-  <div class="relative z-2 text-center px-4 md:px-16">
-    <h1 class="text-white text-4xl lg:text-7xl md:text-5xl font-medium">{{ page.hero_title }}</h1>
-    <p class="text-white text-xl lg:text-4xl md:text-2xl mt-4">{{ page.hero_subtitle }}</p>
-  </div>
-</section>
+<section class="relative w-full h-screen flex items-center justify-center overflow-hidden"></section>
 
-<section id="advantages" class="max-w-7xl mx-auto mt-8 grid grid-cols-1 lg:grid-cols-4 gap-16 p-16">
-  <div class="flex flex-col items-center text-center">
-    {% image page.advantage1_img original as a1_img%}
-    <img src="{{ a1_img.url }}" alt="{{ page.advantage1_title }}" class="w-25 h-25 mb-8">
-    <div>
-      <h3 class="text-xl font-bold mb-4">{{ page.advantage1_title }}</h3>
-      <p>{{ page.advantage1_text }}</p>
+<section class="w-full rounded-t-2xl {% cycle 'bg-secondary/90' 'bg-primary/90' as bg_style %}">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-16 px-4 py-8 md:px-16 lg:py-16 items-start">
+    <div class="flex lg:flex-col items-center justify-center text-center gap-4">
+      {% image page.advantage1_img original as a1_img%}
+      <img src="{{ a1_img.url }}" alt="{{ page.advantage1_title }}" class="w-16 h-16 lg:w-25 lg:h-25 lg:mb-8">
+      <div>
+        <h3 class="text-xl font-bold lg:mb-4">{{ page.advantage1_title }}</h3>
+        <p>{{ page.advantage1_text }}</p>
+      </div>
     </div>
-  </div>
-  <div class="flex flex-col items-center text-center">
-    {% image page.advantage2_img original as a2_img%}
-    <img src="{{ a2_img.url }}" alt="{{ page.advantage2_title }}" class="w-25 h-25 mb-8">
-    <h3 class="text-xl font-bold mb-4">{{ page.advantage2_title }}</h3>
-    <p>{{ page.advantage2_text }}</p>
-  </div>
-  <div class="flex flex-col items-center text-center">
-    {% image page.advantage3_img original as a3_img%}
-    <img src="{{ a3_img.url }}" alt="{{ page.advantage3_title }}" class="w-25 h-25 mb-8">
-    <h3 class="text-xl font-bold mb-4">{{ page.advantage3_title }}</h3>
-    <p>{{ page.advantage3_text }}</p>
-  </div>
-  <div class="flex flex-col items-center text-center">
-    {% image page.advantage4_img original as a4_img%}
-    <img src="{{ a4_img.url }}" alt="{{ page.advantage4_title }}" class="w-25 h-25 mb-8">
-    <h3 class="text-xl font-bold mb-4">{{ page.advantage4_title }}</h3>
-    <p>{{ page.advantage4_text }}</p>
+    <div class="flex lg:flex-col items-center justify-center text-center gap-4">
+      {% image page.advantage2_img original as a2_img%}
+      <img src="{{ a2_img.url }}" alt="{{ page.advantage2_title }}" class="w-16 h-16 lg:w-25 lg:h-25 lg:mb-8">
+      <div>
+        <h3 class="text-xl font-bold lg:mb-4">{{ page.advantage2_title }}</h3>
+        <p>{{ page.advantage2_text }}</p>
+      </div>
+    </div>
+    <div class="flex lg:flex-col items-center justify-center text-center gap-4">
+      {% image page.advantage3_img original as a3_img%}
+      <img src="{{ a3_img.url }}" alt="{{ page.advantage3_title }}" class="w-16 h-16 lg:w-25 lg:h-25 lg:mb-8">
+      <div>
+        <h3 class="text-xl font-bold lg:mb-4">{{ page.advantage3_title }}</h3>
+        <p>{{ page.advantage3_text }}</p>
+      </div>
+    </div>
+    <div class="flex lg:flex-col items-center justify-center text-center gap-4">
+      {% image page.advantage4_img original as a4_img%}
+      <img src="{{ a4_img.url }}" alt="{{ page.advantage4_title }}" class="w-16 h-16 lg:w-25 lg:h-25 lg:mb-8">
+      <div>
+        <h3 class="text-xl font-bold lg:mb-4">{{ page.advantage4_title }}</h3>
+        <p>{{ page.advantage4_text }}</p>
+      </div>
+    </div>
   </div>
 </section>
 
 {% for item in categories_with_tours %}
-  <section class="max-w-7xl mx-auto mt-8">
-    <h1 class="text-center text-3xl font-semibold mb-4">{{ item.category.title }}</h1>
-    <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
-      {% for tour in item.tours %}
-        {% image tour.image width-640 as img %}
-        {% include "home/includes/card.html" with title=tour.title price=tour.price image=img.url  text=tour.short_desc link=tour.url %}
-      {% endfor %}
+  <section class="w-full py-8 {% cycle bg_style %}">
+    <div class="max-w-7xl mx-auto">
+      <h1 class="text-center text-3xl font-semibold mb-4">{{ item.category.title }}</h1>
+      <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+        {% for tour in item.tours %}
+          {% image tour.image width-640 as img %}
+          {% include "home/includes/card.html" with title=tour.title price=tour.price image=img.url  text=tour.short_desc link=tour.url %}
+        {% endfor %}
+      </div>
     </div>
   </section>
 {% endfor %}
 
 {% endblock content %}
+
+{% block logo_sub %}
+  <h1 class="text-lg md:text-4xl lg:text-5xl font-medium">{{ page.hero_title }}</h1>
+  <p class=" md:text-xl lg:text-2xl md:mt-2">{{ page.hero_subtitle }}</p>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    const logoContainer = document.querySelector('#logo-container');
+    const logoSub = document.querySelector('#logo-sub');
+    const logoImg = document.querySelector('#logo-img');
+    const logoLink = document.querySelector('#logo-link');
+
+    function beforeScroll() {
+      logoContainer.classList = "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-4 w-full max-w-[80%] md:max-w-[50%]w-full transition-all duration-300";
+      logoSub.classList = "text-center text-white mt-8";
+      logoImg.classList.remove("scale-100");
+      logoImg.classList.add("scale-200", "md:scale-250");
+    }
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 64) {
+        logoContainer.classList = "fixed top-4 left-4 transition-all duration-300";
+        logoSub.classList = "hidden";
+        logoImg.classList.remove("scale-200", "md:scale-250");
+        logoImg.classList.add("scale-100");
+      } else {
+        beforeScroll();
+      }
+    });
+
+    beforeScroll();
+  </script>
+{% endblock extra_js %}

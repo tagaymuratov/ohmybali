@@ -1,5 +1,6 @@
-{% load static i18n wagtailcore_tags wagtailuserbar tailwind_tags%}
+{% load static i18n wagtailcore_tags wagtailuserbar tailwind_tags home_tags wagtailimages_tags %}
 {% wagtail_site as current_site %}
+{% get_home_page_data as home_page %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -20,7 +21,7 @@
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{% static 'css/ohmybali.css' %}">
         {% tailwind_css %}
         {% block extra_css %}
@@ -34,16 +35,21 @@
         {% get_available_languages as LANGUAGES %}
 
         <header class="bg-transparent h-16 flex items-center justify-between px-4 py-2 fixed w-full top-0 left-0 z-10 transition-colors duration-300" id="header">
-            <a href="{{ current_site.root_page.localized.url }}">
-                <img src="{% static 'imgs/logo.webp' %}" alt="ohmyBali" class="h-8">
-            </a>
+            <div id="logo-container">
+                <a id="logo-link" href="{{ current_site.root_page.localized.url }}" class="z-12">
+                    <img id="logo-img" src="{% static 'imgs/logo.webp' %}" alt="ohmyBali" class="h-8 z-12 transition-transform duration-300 ease-in-out">
+                </a>
+                <div id="logo-sub">
+                    {% block logo_sub %}{% endblock %}
+                </div>
+            </div>
             
-            <nav class="ml-auto mr-4">
-                <ul class="flex space-x-8">
+            <nav id="header-nav" class="fixed lg:relative lg:ml-auto lg:mr-4 -right-full lg:right-auto transition-all duration-300 lg:transition-none bg-black lg:bg-transparent p-4 lg:p-0 h-screen lg:h-auto top-16 lg:top-0">
+                <ul class="flex space-y-4 lg:space-y-0 lg:space-x-4 flex-col lg:flex-row">
                     {% for item in current_site.root_page.localized.get_children.live.in_menu %}
                     <li>
                         <a href="{{ item.url }}"
-                            class="uppercase text-sm font-semibold text-white"
+                            class="p-2 uppercase text-sm font-semibold text-white relative before:content-[''] before:absolute before:w-full before:h-0.5 before:bg-white before:bottom-0 before:left-0 before:origin-right before:scale-x-0 before:transition-transform before:duration-300 before:ease-in-out hover:before:scale-x-100 hover:before:origin-left"
                         >
                             {{ item.title }}
                         </a>
@@ -52,13 +58,22 @@
                 </ul>
             </nav>
 
-            <div class="account">
+            <button class="burger flex z-100 ml-auto lg:hidden">
+                <svg width="32" height="32" viewBox="0 0 100 100">
+                    <path class="line line1" d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" />
+                    <path class="line line2" d="M 20,50 H 80" />
+                    <path class="line line3" d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" />
+                </svg>
+            </button>
 
-            </div>
         </header>
 
+        {% image home_page.hero_image original as img %}
+        <image src="{{ img.url }}" alt="Hero Image" class="w-full h-screen object-cover fixed top-0 left-0 -z-999">
+        <div class="fixed w-full h-screen top-0 left-0 bg-black/40 -z-998"></div>
+
         <aside class="fixed top-0 right-0 z-9 w-16 h-screen items-center justify-center hidden md:flex md:flex-col gap-4">
-            <a href="#" target="_blank">
+            <a href="{{ home_page.istagram_link }}" target="_blank">
                 <svg xmlns="http://www.w3.org/2000/svg" 
                     class="w-8 h-8 hover:fill-black transition-colors duration-300" 
                     width="16" height="16" fill="white" viewBox="0 0 16 16">
@@ -66,7 +81,7 @@
                 </svg>
             </a>
 
-            <a href="#" target="_blank">
+            <a href="{{ home_page.whatsapp_link }}" target="_blank">
                 <svg xmlns="http://www.w3.org/2000/svg" 
                     class="w-8 h-8 hover:fill-black transition-colors duration-300" 
                     width="16" height="16" fill="white" viewBox="0 0 16 16">
@@ -74,7 +89,7 @@
                 </svg>
             </a>
 
-            <a href="#" target="_blank">
+            <a href="{{ home_page.telegram_link }}" target="_blank">
                 <svg xmlns="http://www.w3.org/2000/svg" 
                     class="w-8 h-8 hover:fill-black transition-colors duration-300"
                     width="16" height="16" fill="white" viewBox="0 0 16 16">
@@ -85,8 +100,8 @@
 
         {% block content %}{% endblock %}
 
-        <footer class="bg-black text-white p-8 mt-16 mx-auto">
-            <div class="flex items-center flex-wrap justify-center gap-x-16 gap-y-8">
+        <footer class="bg-black text-white p-8 mx-auto">
+            <div class="flex flex-wrap gap-4">
                 <div>
                     <p>Founder of the business</p>
                     <a href="mailto:a.klochkov@ohmybali.com" target="_blank" class="hover:text-primary">a.klochkov@ohmybali.com</a>
@@ -99,9 +114,9 @@
                     <p>PT OHMYBALI DESTINATION MANAGEMENT</p>
                     <p>NIB: 3110250104879</p>
                 </div>
+                <div>
+                <p>Jalan Babakan Canggu Nomor 12, Desa/Kelurahan Canggu, Kec. Kuta Utara, Kab. Badung, Provinsi Bali, Kode Pos: 80351</p>
             </div>
-            <div class="mt-8">
-                <p class="text-center">Jalan Babakan Canggu Nomor 12, Desa/Kelurahan Canggu, Kec. Kuta Utara, Kab. Badung, Provinsi Bali, Kode Pos: 80351</p>
             </div>
         </footer>
 
