@@ -203,3 +203,5 @@ WAGTAILADMIN_BASE_URL = "http://example.com"
 WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip']
 
 WAGTAIL_I18N_ENABLED = True
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY=None
