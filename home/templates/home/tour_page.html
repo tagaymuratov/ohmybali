@@ -9,7 +9,7 @@
 <section class="w-full rounded-t-2xl mt-32 pb-4 md:pt-4 {% cycle 'bg-secondary/90' 'bg-primary/90' as bg_style %}">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-7xl mx-auto px-4 py-4 md:px-16">
       {% image page.image original as img %}
-      <img src="{{ img.url }}" alt="" class="w-full h-full object-cover rounded-xl">
+      <img src="{{ img.url }}" alt="" class="w-full aspect-video object-cover rounded-xl">
     <div id="tour-info" class="flex flex-col gap-4" data-price="{{ page.price }}" data-delta="{{ page.price_delta }}" data-max-people="{{ page.max_people }}">
         <h1 class="text-3xl font-semibold">{{ page.title }}</h1>
         <p id="price">Стоимость: {{ page.price }} USD</p>
@@ -30,19 +30,59 @@
           </div>
         </div>
         <p>{{ page.short_desc }}</p>
-        <a href="#" class="w-fit px-4 py-2 rounded-lg text-primary bg-secondary border border-primary hover:bg-primary hover:text-secondary transition-colors duration-300">ЗАБРОНИРОВАТЬ</a>
+        <button type="button" onclick="toggleModal()" class="w-fit px-4 py-2 rounded-lg text-primary bg-secondary border border-primary hover:bg-primary hover:text-secondary transition-colors duration-300">ЗАБРОНИРОВАТЬ</button>
     </div>
   </div>
 </section>
 
+<div id="modal" class="hidden bg-secondary fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-xl p-4 md:p-8 z-301 w-[calc(100vw-32px)] max-w-md transition-all duration-300">
+  <form method="post" id="book-form" class="flex flex-col">
+    {% csrf_token %}
+    <h1 class="text-3xl font-semibold">{{ page.title }}</h1>
+    
+    <label for="name" class="mt-4">Ваше имя и фамилия</label>
+    <input type="text" id="name" name="name" autocomplete="name" required class="bg-white rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+
+    <label for="phone" class="mt-4">Номер телефона</label>
+    <input type="tel" id="phone" name="phone" autocomplete="tel" required class="bg-white rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+
+    <label for="email" class="mt-4">Email</label>
+    <input type="email" id="email" name="email" autocomplete="email" required class="bg-white rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"  >
+
+    <div class="flex items-center justify-start mt-4">
+      <span>Количество гостей</span>
+      <div class="flex items-center space-x-4 ml-4">
+          <div id="decrease-guests-2" class="w-8 h-8 rounded-full border border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-secondary transition-all active:scale-95">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+              </svg>
+          </div>
+          <span id="guests-count-2" class="text-lg font-bold w-4 text-center">1</span>
+          <div id="increase-guests-2" class="w-8 h-8 rounded-full border border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-secondary transition-all active:scale-95">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+          </div>
+      </div>
+    </div>
+
+    <p id="modal-price" class="mt-4 font-medium">Стоимость: {{ page.price }} USD</p>
+
+    <button id="book-form-submit" type="submit" class="px-4 py-2 mt-4 rounded-lg text-primary bg-secondary border border-primary hover:bg-primary hover:text-secondary transition-all duration-300">
+      <span id="book-form-submit-text" class="">Забронировать</span>
+      <svg id="book-form-submit-loader" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+    </button>
+  </form>
+</div>
+
 <section class="w-full py-8 {% cycle bg_style %}">
-    <div class="max-w-7xl mx-auto px-4 md:px-16">
+    <div class="max-w-4xl mx-auto px-4 md:px-16">
         <p>{{ page.text }}</p>
     </div>
 </section>
 
 <section class="w-full py-8 {% cycle bg_style %}">
-  <h2 class="text-2xl font-semibold text-center mb-4">Фотографии с тура</h2>
+  <h2 class="text-2xl font-semibold text-center mb-4">{{ photo_text }}</h2>
   <div class="swiper h-[66vh] w-[calc(100%-32px)] md:w-[calc(100%-128px)] mx-auto rounded-xl [--swiper-navigation-color:#fff] [--swiper-pagination-color:#fff] [--swiper-scrollbar-drag-bg-color:#fff] [--swiper-scrollbar-bg-color:#000] [--swiper-navigation-size:24px]">
     <div class="swiper-wrapper">
       {% for photo in page.photos %}
@@ -62,36 +102,131 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
   <script src="{% static 'js/kzswiper.js' %}"></script>
   <script>
+    const pageId = {{ page.id }};
     const decreaseBtn = document.getElementById('decrease-guests');
+    const decreaseBtn2 = document.getElementById('decrease-guests-2');
     const increaseBtn = document.getElementById('increase-guests');
+    const increaseBtn2 = document.getElementById('increase-guests-2');
     const guestsCount = document.getElementById('guests-count');
+    const guestsCount2 = document.getElementById('guests-count-2');
     const price = document.getElementById('price');
+    const modalPrice = document.getElementById('modal-price');
     const tourInfo = document.getElementById('tour-info');
     const delta = parseInt(tourInfo.dataset.delta);
     const tourPrice = parseInt(tourInfo.dataset.price);
     const maxPeople = parseInt(tourInfo.dataset.maxPeople);
 
-    let count = parseInt(guestsCount.textContent);
+    const modal = document.getElementById('modal');
+    const overlay = document.getElementById('overlay');
 
-    decreaseBtn.addEventListener('click', () => {
+    const bookingForm = document.getElementById('book-form');
+    const bookFormSubmit = document.getElementById('book-form-submit');
+    const bookFormSubmitText = document.getElementById('book-form-submit-text');
+    const bookFormSubmitLoader = document.getElementById('book-form-submit-loader');
+
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    let count = 1;
+    let totalPrice = tourPrice + (count - 1) * delta;
+
+    bookingForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      bookFormSubmit.disabled = true;
+      bookFormSubmitText.classList.add('hidden');
+      bookFormSubmitLoader.classList.remove('hidden');
+      const apiUrl = `${window.location.origin}/api/booking/`;
+
+      try {
+        const response = await fetch("/api/booking/",{
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken
+          },
+          body: JSON.stringify({
+            page_id: pageId,
+            name: document.querySelector('#name').value,
+            email: document.querySelector('#email').value,
+            phone: document.querySelector('#phone').value,
+            guests: count,
+            cost: totalPrice,
+          })
+        });
+
+        if (response.ok) {
+            this.reset();
+        } else {
+          throw new Error('Ошибка сервера');
+        }
+                    
+      } catch (error) {
+        console.error("Ошибка при отправке данных бронирования:", error);
+        alert('Произошла ошибка при отправке. Пожалуйста, попробуйте позже.');
+
+      } finally {
+        bookFormSubmit.disabled = false;
+        bookFormSubmitText.classList.remove('hidden');
+        bookFormSubmitLoader.classList.add('hidden');
+      }
+
+      toggleModal();
+    });
+
+    function decreseGuests() {
         if (count > 1) {
             count--;
             guestsCount.textContent = count;
+            guestsCount2.textContent = count;
             updatePrice();
         }
-    });
+    }
 
-    increaseBtn.addEventListener('click', () => {
-        if (count < maxPeople) {
+    function increaseGuests() {
+          if (count < maxPeople) {
             count++;
             guestsCount.textContent = count;
+            guestsCount2.textContent = count;
             updatePrice();
         }
-    });
+    }
+
+    decreaseBtn.addEventListener('click', decreseGuests);
+    decreaseBtn2.addEventListener('click', decreseGuests);
+    increaseBtn.addEventListener('click', increaseGuests);
+    increaseBtn2.addEventListener('click', increaseGuests);
 
     function updatePrice() {
-        const totalPrice = tourPrice + (count - 1) * delta;
+        totalPrice = tourPrice + (count - 1) * delta;
         price.textContent = `Стоимость: ${totalPrice} USD`;
+        modalPrice.textContent = `Стоимость: ${totalPrice} USD`;
     }
+
+    function toggleModal() {
+      if (modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+            modal.classList.remove('scale-95', 'opacity-0');
+            modal.classList.add('scale-100', 'opacity-100');
+        }, 10);
+      } else {
+        modal.classList.remove('scale-100', 'opacity-100');
+        modal.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+          modal.classList.add('hidden');
+        }, 300);
+        document.body.style.overflow = '';
+      }
+
+      overlay.classList.toggle('hidden');
+    }
+
+    overlay.addEventListener('click', toggleModal);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        toggleModal();
+      }
+    });
   </script>
 {% endblock %}

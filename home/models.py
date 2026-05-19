@@ -1,10 +1,15 @@
+import requests
 from django.db import models
-
 from wagtail.models import Page
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import StreamField
 from wagtail.blocks import RichTextBlock
 from wagtail.images.blocks import ImageChooserBlock
+
+from os import getenv
+
+BOT_TOKEN = getenv("TG_BOT_TOKEN")
+CHAT_ID_KEZIGN = getenv("CHAT_ID_KEZIGN")
 
 class HomePage(Page):
     subpage_types = ["AboutUsPage", "TourCategoryPage"]
@@ -17,6 +22,7 @@ class HomePage(Page):
     )
     hero_title = models.CharField(max_length=64, blank=True, null=True)
     hero_subtitle = models.CharField(max_length=128, blank=True, null=True)
+    photo_text = models.CharField(max_length=128, blank=True, null=True, verbose_name="Текст над фото")
 
     advantage1_img = models.ForeignKey(
         "wagtailimages.Image",
@@ -67,6 +73,7 @@ class HomePage(Page):
             FieldPanel("hero_image"),
             FieldPanel("hero_title"),
             FieldPanel("hero_subtitle"),
+            FieldPanel("photo_text"),
         ], heading="Hero Section"),
         MultiFieldPanel([
             FieldPanel("advantage1_img"),
@@ -160,6 +167,30 @@ class TourPage(Page):
         FieldPanel("text"),
         FieldPanel("photos"),
     ]
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        context["photo_text"] = HomePage.objects.live().filter(locale=self.locale).first().photo_text
+        return context
+
+    def send_to_telegram(self, booking_data):
+        message = (
+            f"Новая бронь!\n"
+            f"Тур: {self.title}\n"
+            f"От: {booking_data['name']}\n"
+            f"Email: {booking_data['email']}\n"
+            f"Телефон: {booking_data['phone']}\n"
+            f"Количество гостей: {booking_data['guests']}\n"
+            f"Стоимость: {booking_data['cost']}\n"
+        )
+
+        url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+        payload = {
+            "chat_id": CHAT_ID_KEZIGN,
+            "text": message,
+            "parse_mode": "HTML"
+        }
+        requests.post(url, data=payload)
 
 class TourCategoryPage(Page):
     subpage_types = ["TourPage"]

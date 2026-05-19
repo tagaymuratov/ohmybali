@@ -14,11 +14,10 @@ urlpatterns = [
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("search/", search_views.search, name="search"),
-    path("home/", include("home.urls", namespace="home")),
+    path("api/", include("home.urls", namespace="home")),
     path("users/", include("users.urls", namespace="users")),
     path('i18n/', include('django.conf.urls.i18n')),
 ]
-
 
 if settings.DEBUG:
     from django.conf.urls.static import static
@@ -28,6 +27,6 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
-    path("", include(wagtail_urls)),
     path("__reload__/", include("django_browser_reload.urls")),
+    path("", include(wagtail_urls)),
 )
