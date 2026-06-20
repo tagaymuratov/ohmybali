@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load static i18n wagtailcore_tags wagtailimages_tags%}
+
+{% block content %}
+<section class="bg-secondary/80 rounded-t-2xl mt-32">
+  <div class="max-w-7xl mx-auto py-16 px-16">
+    <h1 class="text-center text-4xl font-medium mb-8">ohmyBali — ваш партнёр на острове</h1>
+    <div class="flex flex-col md:flex-row gap-8">
+      <div class="flex-1 relative min-h-80">
+        <img src={% static 'imgs/presentation/1.webp' %} class="object-cover rounded-2xl absolute inset-0 w-full h-full"/>
+      </div>
+      <div class="flex-1 py-4 gap-4 flex flex-col">
+        <p><strong>ohmyBali — принимающая сторона и тревел-агентство на Бали.</strong></p>
+        <p>Мы создаём авторские туры, ретриты и события, объединяя профессиональный сервис с глубоким знанием острова.</p>
+        <p>Компания официально зарегистрирована как юридическое лицо в:</p>
+        <ul class="list-disc ml-4"><li>Казахстане</li><li>России</li><li>Индонезии (о. Бали)<br></li></ul>
+        <p>это даёт нам возможность работать прозрачно и удобно с клиентами и партнёрами из разных стран.</p>
+      </div>
+    </div>
+    <h1 class="text-center text-4xl font-medium mb-8 mt-16">Наша миссия</h1>
+    <div class="flex flex-col md:flex-row gap-8">
+      <div class="flex-1 py-4 flex flex-col gap-4">
+        <p>Мы стремимся быть надёжным партнёром, объединяя профессиональный сервис, глубокое знание Бали и гибкий подход.</p>
+        <p>Для нас важно не только организовать туры и события, но и создавать проекты, которые вдохновляют и остаются в памяти.</p>
+      </div>
+      <div class="flex-1 relative min-h-80">
+        <img src={% static 'imgs/presentation/2.webp' %} class="object-cover rounded-2xl absolute inset-0 w-full h-full"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ohmyEvent" class="bg-(--color-primary)/90">
+  <div class="container max-w-7xl mx-auto py-16 px-16">
+    <div class="flex items-stretch flex-col gap-8 md:flex-row-reverse">
+      <div class="flex-1 py-4 flex flex-col gap-4">
+        <h1 class="presentation-title-wunderline">ohmyEvent</h1>        
+        <p><em>полный цикл MICE-организации на Бали</em></p>
+        <p>мы берём на себя всю организационную часть деловых мероприятий:</p>
+        <ul class="list-disc ml-4"><li>конференции, съезды, форумы, саммиты</li><li>подбор площадки и техническое обеспечение</li><li>организация проживания по специальным тарифам</li><li>работа с подрядчиками, кейтеринг, декор</li><li>встреча и сопровождение участников</li><li>программа, экскурсии, ужины, развлекательная часть</li></ul>
+        <p>💼 работаем по международным mice-стандартам</p>
+        <p>💬 опыт управления мероприятиями на 1000+ человек</p>
+        <p>🌴 все сложности мы берём на себя - вы просто прилетаете и проводите своё событие на высшем уровне</p>
+        <p><em>Бали - это новая точка силы для вашего бизнеса</em></p>
+      </div>
+      <div class="flex-1 relative min-h-80">
+        <img src={% static 'imgs/presentation/3.webp' %} class="object-cover rounded-2xl absolute inset-0 w-full h-full"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ohmyGroup" class="bg-(--color-secondary)/80">
+  <div class="container max-w-7xl mx-auto py-16 px-16">
+    <div class="flex items-stretch flex-col gap-8 md:flex-row">
+      <div class="flex-1 py-4 flex flex-col gap-4">
+        <h1 class="presentation-title-wunderline">ohmyGroup</h1>
+        <p><em>групповые авторские туры</em></p>
+        <p>готовые уникальные путешествия для единомышленников от 7 до 14 дней.</p>
+        <p>формат «присоединиться и не думать ни о чём» - всё уже организовано:</p>
+        <ul class="list-disc ml-4"><li>проживание</li><li>завтраки</li><li>трансферы и насыщенная программа</li><li>душевная компания и забота</li></ul>
+      </div>
+      <div class="flex-1 relative min-h-80">
+        <img src={% static 'imgs/presentation/4.webp' %} class="object-cover rounded-2xl absolute inset-0 w-full h-full"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ohmySoul" class="bg-(--color-primary)/90">
+  <div class="container max-w-7xl mx-auto py-16 px-16">
+    <div class="flex items-stretch flex-col gap-8 md:flex-row-reverse">
+      <div class="flex-1 py-4 flex flex-col gap-4">
+        <h1 class="presentation-title-wunderline">ohmySoul</h1>
+        <p><em>Туры для вашей души</em></p>
+        <p>Мы создаём программы, где сочетаются йога, медитации, звуковые практики и прогулки на природе. Такой формат помогает перезагрузиться и открыть Бали с другой стороны - спокойной и осмысленной.</p>
+        <ul class="list-disc ml-4"><li>проведение ретритов</li><li>организация духовных программ</li><li>индивидуальные церемонии (очищение, балийские традиции)</li><li>мягкий контакт с культурой и природой</li></ul>
+        <p>* также работаем с проводниками:</p>
+        <p>если у вас есть аудитория - мы создадим для вас авторский тур или ретрит на высшем уровне.</p>
+      </div>
+      <div class="flex-1 relative min-h-80">
+        <img src={% static 'imgs/presentation/5.webp' %} class="object-cover rounded-2xl absolute inset-0 w-full h-full"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ohmyTrip" class="bg-(--color-secondary)/80">
+  <div class="container max-w-7xl mx-auto py-16 px-16">
+    <div class="flex items-stretch flex-col gap-8 md:flex-row">
+      <div class="flex-1 py-4 flex flex-col gap-4">
+        <h1 class="presentation-title-wunderline">ohmyTrip</h1>
+        <p><em>индивидуальные путешествия</em></p>
+        <p>мы создаём индивидуальные маршруты по Бали с учётом интересов и запросов клиента. каждый тур продуман до деталей и сочетает комфорт, атмосферу острова и персональный подход.</p>
+        <ul class="list-disc ml-4"><li>авторские маршруты «под ключ»</li><li>персональное сопровождение и организация</li><li>доступ к уникальным локациям и сервисам</li><li>фото- и видеосопровождение по запросу</li><li>подбор кафе, вилл и эксклюзивных точек для отдыха</li></ul>
+      </div>
+      <div class="flex-1 relative min-h-80">
+        <img src={% static 'imgs/presentation/6.webp' %} class="object-cover rounded-2xl absolute inset-0 w-full h-full"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ohmyDay" class="bg-(--color-primary)/90">
+  <div class="container max-w-7xl mx-auto py-16 px-16">
+    <div class="flex items-stretch flex-col gap-8 md:flex-row-reverse">
+      <div class="flex-1 py-4 flex flex-col gap-4">
+        <h1 class="presentation-title-wunderline">ohmyDay</h1>
+        <p><em>экскурсии и поездки одного дня</em></p>
+        <p>мы организуем насыщенные однодневные маршруты по острову для небольших и больших групп:</p>
+        <ul class="list-disc ml-4"><li>гид и сопровождающий</li><li>комфортный транспорт</li><li>входные билеты</li></ul>
+        <p>* мы подбираем лучший маршрут под сезон, погоду и настроение группы.</p>
+      </div>
+      <div class="flex-1 relative min-h-80">
+        <img src={% static 'imgs/presentation/7.webp' %} class="object-cover rounded-2xl absolute inset-0 w-full h-full"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ohmySport" class="bg-(--color-secondary)/80">
+  <div class="container max-w-7xl mx-auto py-16 px-16">
+    <div class="flex items-stretch flex-col gap-8 md:flex-row">
+      <div class="flex-1 py-4 flex flex-col gap-4">
+        <h1 class="presentation-title-wunderline">ohmySport</h1>
+        <p><em>спортивные туры и активные программы</em></p>
+        <p>мы организуем спортивные и фитнес-туры «под ключ»: проживание, питание, трансферы, аренда площадок и сопровождение тренеров.</p>
+        <p>форматы:</p>
+        <ul class="list-disc ml-4"><li>падел и большой теннис: сборы, турниры, персональные программы</li><li>фитнес-выезды и bootcamps: интенсивные тренировки, спецпитание</li><li>сёрфинг и sup-программы: для новичков и профи</li><li>йога, пилатес, боевые искусства: групповые и индивидуальные занятия</li><li>активные туры: восхождения, веломаршруты, беговые сборы</li></ul>
+      </div>
+      <div class="flex-1 relative min-h-80">
+        <img src={% static 'imgs/presentation/8.webp' %} class="object-cover rounded-2xl absolute inset-0 w-full h-full"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="whyUs" class="bg-(--color-primary)/90">
+  <div class="container max-w-7xl mx-auto py-16 px-16">
+    <div class="flex items-stretch flex-col gap-8 md:flex-row">
+      <div class="flex-1 relative min-h-80">
+        <img src={% static 'imgs/presentation/9.webp' %} class="object-cover rounded-2xl absolute inset-0 w-full h-full"/>
+      </div>
+      <div class="flex-1 py-4 flex flex-col gap-4">
+        <h1 class="text-4xl">Почему мы? - Наш подход</h1>
+        <ul class="list-disc ml-4"><li>работаем как официальная принимающая сторона на бали</li><li>юридические лица в казахстане, россии и индонезии</li><li>команда на месте: локальные контакты и экспертиза</li><li>коммуникация на русском и английском языках</li><li>понимаем задачи агентств и ожидания клиентов</li><li>быстро реагируем и предоставляем решения «под ключ»</li></ul>
+        <p><em>Мы соединяем локальные возможности и привычный для партнёров уровень сервиса.</em></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

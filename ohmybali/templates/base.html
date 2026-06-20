@@ -26,6 +26,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{% static 'css/ohmybali.css' %}">
         {% tailwind_css %}
         {% block extra_css %}
@@ -131,8 +132,8 @@
 
         {% block content %}{% endblock %}
 
-        <footer class="bg-black text-white p-8 mx-auto">
-            <div class="flex flex-wrap gap-4">
+        <footer class="bg-black text-white p-8 mx-auto text-sm">
+            <div class="flex flex-wrap gap-8">
                 <div>
                     <p>Founder of the business</p>
                     <a href="mailto:a.klochkov@ohmybali.com" target="_blank" class="hover:text-primary">a.klochkov@ohmybali.com</a>

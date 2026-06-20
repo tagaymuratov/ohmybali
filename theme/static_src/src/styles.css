@@ -2,7 +2,19 @@
 
 @theme{
   --font-sans: "Montserrat", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: "Lora", ui-serif, system-ui, -apple-system, serif;
   --color-primary: #787143;
   --color-secondary: #fffff0;
 }
+
+@layer utilities{
+  h1{
+    font-family: var(--font-serif);
+  }
+
+  .presentation-title-wunderline{
+    @apply text-4xl font-medium relative before:absolute before:-bottom-2 before:left-0 before:h-0.5 before:w-full before:bg-black;
+  }
+}
+
 @source "../../../**/*.{html,py,js}";

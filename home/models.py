@@ -12,7 +12,7 @@ BOT_TOKEN = getenv("TG_BOT_TOKEN")
 CHAT_ID_KEZIGN = getenv("CHAT_ID_KEZIGN")
 
 class HomePage(Page):
-    subpage_types = ["AboutUsPage", "TourCategoryPage"]
+    subpage_types = ["AboutUsPage", "TourCategoryPage", "PresentationPage"]
     hero_image = models.ForeignKey(
         "wagtailimages.Image",
         blank=True,
@@ -211,3 +211,8 @@ class TourCategoryPage(Page):
 
         context["tours"] = tours
         return context
+    
+class PresentationPage(Page):
+    subpage_types = []
+    parent_page_types = ["HomePage"]
+    max_count_per_parent = 1   
