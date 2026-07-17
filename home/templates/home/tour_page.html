@@ -83,11 +83,11 @@
 
 <section class="w-full py-8 {% cycle bg_style %}">
   <h2 class="text-2xl font-semibold text-center mb-4">{{ photo_text }}</h2>
-  <div class="swiper h-[66vh] w-[calc(100%-32px)] md:w-[calc(100%-128px)] mx-auto rounded-xl [--swiper-navigation-color:#fff] [--swiper-pagination-color:#fff] [--swiper-scrollbar-drag-bg-color:#fff] [--swiper-scrollbar-bg-color:#000] [--swiper-navigation-size:24px]">
+  <div class="swiper bg-primary h-[66vh] w-[calc(100%-32px)] md:w-[calc(100%-128px)] mx-auto rounded-xl [--swiper-navigation-color:#fff] [--swiper-pagination-color:#fff] [--swiper-scrollbar-drag-bg-color:#fff] [--swiper-scrollbar-bg-color:#000] [--swiper-navigation-size:24px]">
     <div class="swiper-wrapper">
       {% for photo in page.photos %}
         <div class="swiper-slide">
-          {% image photo.value original class="w-full h-full object-cover" %}
+          {% image photo.value original class="w-full h-full object-contain" %}
         </div>
       {% endfor %}
     </div>
