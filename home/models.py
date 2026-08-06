@@ -12,7 +12,7 @@ BOT_TOKEN = getenv("TG_BOT_TOKEN")
 CHAT_ID_KEZIGN = getenv("CHAT_ID_KEZIGN")
 
 class HomePage(Page):
-    subpage_types = ["AboutUsPage", "TourCategoryPage", "PresentationPage"]
+    subpage_types = ["AboutUsPage", "TourCategoryPage", "PresentationPage", "UserAgreement"]
     hero_image = models.ForeignKey(
         "wagtailimages.Image",
         blank=True,
@@ -167,6 +167,7 @@ class TourPage(Page):
     def get_context(self, request):
         context = super().get_context(request)
         context["photo_text"] = HomePage.objects.live().filter(locale=self.locale).first().photo_text
+        context["user_agreement"] = UserAgreement.objects.live().filter(locale=self.locale).first()
         return context
 
     def send_to_telegram(self, booking_data):
@@ -212,3 +213,19 @@ class PresentationPage(Page):
     subpage_types = []
     parent_page_types = ["HomePage"]
     max_count_per_parent = 1   
+
+class UserAgreement(Page):
+    subpage_types = []
+    parent_page_types = ["HomePage"]
+    max_count_per_parent = 1
+
+    text = StreamField([
+        ('rtfblock', RichTextBlock(features=[
+            "h1","h2","h3","ol","ul","hr","blockquote","superscript","subscript","strikethrough","bold","italic","link"
+        ], label="Текст")),
+        ('imgblock', ImageChooserBlock(label="Изображение", template="blocks/image_block.html")),
+    ], blank=True, null=True, verbose_name="Текст пользовательского соглашения")
+
+    content_panels = Page.content_panels + [
+        FieldPanel("text"),
+    ]
