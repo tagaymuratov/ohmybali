@@ -17,7 +17,6 @@ def booking_view(request):
 
     booking_data = {
         "name": data.get("name"),
-        "email": data.get("email"),
         "phone": data.get("phone"),
         "guests": data.get("guests"),
         "cost": data.get("cost"),

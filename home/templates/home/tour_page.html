@@ -10,7 +10,7 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-7xl mx-auto px-4 py-4 md:px-16">
       {% image page.image original as img %}
       <img src="{{ img.url }}" alt="" class="w-full aspect-video object-cover rounded-xl">
-    <div id="tour-info" class="flex flex-col gap-4" data-price="{{ page.price }}" data-delta="{{ page.price_delta }}" data-max-people="{{ page.max_people }}">
+    <div id="tour-info" class="flex flex-col gap-4" data-price="{{ page.price }}">
         <h1 class="text-3xl font-semibold">{{ page.title }}</h1>
         <p id="price">Стоимость: {{ page.price }} IDR</p>
         <div class="flex items-center justify-start">
@@ -46,9 +46,6 @@
     <label for="phone" class="mt-4">Номер телефона</label>
     <input type="tel" id="phone" name="phone" autocomplete="tel" required class="bg-white rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
 
-    <label for="email" class="mt-4">Email</label>
-    <input type="email" id="email" name="email" autocomplete="email" required class="bg-white rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"  >
-
     <div class="flex items-center justify-start mt-4">
       <span>Количество гостей</span>
       <div class="flex items-center space-x-4 ml-4">
@@ -73,6 +70,11 @@
       <svg id="book-form-submit-loader" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
     </button>
   </form>
+</div>
+
+<div id="modal-success" class="hidden bg-secondary fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-xl p-4 md:p-8 z-301 w-[calc(100vw-32px)] max-w-md transition-all duration-300">
+  <p class="">Ваш заказ забронирован</p>
+  <button class="px-4 py-2 mt-4 w-full rounded-lg text-primary bg-secondary border border-primary hover:bg-primary hover:text-secondary transition-all duration-300" onclick="toggleSuccessModal()">Ок</button>
 </div>
 
 <section class="w-full py-8 {% cycle bg_style %}">
@@ -112,11 +114,11 @@
     const price = document.getElementById('price');
     const modalPrice = document.getElementById('modal-price');
     const tourInfo = document.getElementById('tour-info');
-    const delta = parseInt(tourInfo.dataset.delta);
     const tourPrice = parseInt(tourInfo.dataset.price);
-    const maxPeople = parseInt(tourInfo.dataset.maxPeople);
+    const maxPeople = 6;
 
     const modal = document.getElementById('modal');
+    const modalSuccess = document.getElementById('modal-success');
     const overlay = document.getElementById('overlay');
 
     const bookingForm = document.getElementById('book-form');
@@ -127,9 +129,10 @@
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
     let count = 1;
-    let totalPrice = tourPrice + (count - 1) * delta;
+    let totalPrice = tourPrice;
 
     bookingForm.addEventListener('submit', async function (e) {
+      var success = false;
       e.preventDefault();
       bookFormSubmit.disabled = true;
       bookFormSubmitText.classList.add('hidden');
@@ -146,7 +149,6 @@
           body: JSON.stringify({
             page_id: pageId,
             name: document.querySelector('#name').value,
-            email: document.querySelector('#email').value,
             phone: document.querySelector('#phone').value,
             guests: count,
             cost: totalPrice,
@@ -154,7 +156,8 @@
         });
 
         if (response.ok) {
-            this.reset();
+          success = true;
+          this.reset();
         } else {
           throw new Error('Ошибка сервера');
         }
@@ -167,9 +170,11 @@
         bookFormSubmit.disabled = false;
         bookFormSubmitText.classList.remove('hidden');
         bookFormSubmitLoader.classList.add('hidden');
+        toggleModal();
+        if(success) {
+          toggleSuccessModal();
+        }
       }
-
-      toggleModal();
     });
 
     function decreseGuests() {
@@ -196,32 +201,67 @@
     increaseBtn2.addEventListener('click', increaseGuests);
 
     function updatePrice() {
-        totalPrice = tourPrice + (count - 1) * delta;
-        price.textContent = `Стоимость: ${totalPrice} IDR`;
-        modalPrice.textContent = `Стоимость: ${totalPrice} IDR`;
+      totalPrice = tourPrice;
+      if(count == 6){
+        totalPrice = tourPrice + (tourPrice * .85) + (tourPrice * .85) + (tourPrice * .7) + (tourPrice * .6) + (tourPrice * .5);
+      }else if(count == 5){
+        totalPrice = tourPrice + (tourPrice * .85) + (tourPrice * .85) + (tourPrice * .7) + (tourPrice * .6);
+      }else if(count == 4){
+        totalPrice = tourPrice + (tourPrice * .85) + (tourPrice * .85) + (tourPrice * .7);
+      }else if(count == 3){
+        totalPrice = tourPrice + (tourPrice * .85) + (tourPrice * .85);
+      }else if(count == 2){
+        totalPrice = tourPrice + (tourPrice * .85);
+      }
+
+      price.textContent = `Стоимость: ${totalPrice} IDR`;
+      modalPrice.textContent = `Стоимость: ${totalPrice} IDR`;
     }
 
     function toggleModal() {
       if (modal.classList.contains('hidden')) {
         modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
+        overlay.classList.remove('hidden');
         setTimeout(() => {
             modal.classList.remove('scale-95', 'opacity-0');
             modal.classList.add('scale-100', 'opacity-100');
-        }, 10);
+        }, 300);
       } else {
         modal.classList.remove('scale-100', 'opacity-100');
         modal.classList.add('scale-95', 'opacity-0');
+        overlay.classList.add('hidden');
         setTimeout(() => {
           modal.classList.add('hidden');
         }, 300);
-        document.body.style.overflow = '';
       }
-
-      overlay.classList.toggle('hidden');
     }
 
-    overlay.addEventListener('click', toggleModal);
+    function toggleSuccessModal() {
+      if (modalSuccess.classList.contains('hidden')) {
+        modalSuccess.classList.remove('hidden');
+        overlay.classList.remove('hidden');
+        setTimeout(() => {
+            modalSuccess.classList.remove('scale-95', 'opacity-0');
+            modalSuccess.classList.add('scale-100', 'opacity-100');
+        }, 300);
+      } else {
+        modalSuccess.classList.remove('scale-100', 'opacity-100');
+        modalSuccess.classList.add('scale-95', 'opacity-0');
+        overlay.classList.add('hidden');
+        setTimeout(() => {
+          modalSuccess.classList.add('hidden');
+        }, 300);
+      }
+    }
+
+    overlay.addEventListener('click', () => {
+      if (!modal.classList.contains('hidden')) {
+        toggleModal();
+      }
+      if (!modalSuccess.classList.contains('hidden')) {
+        toggleSuccessModal();
+      }
+    });
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !modal.classList.contains('hidden')) {

@@ -143,8 +143,6 @@ class TourPage(Page):
     )
 
     price = models.IntegerField(blank=True, null=True, verbose_name="Цена")
-    price_delta = models.IntegerField(blank=True, null=True, verbose_name="Дельта цены для умножения на количество человек")
-    max_people = models.IntegerField(blank=True, null=True, verbose_name="Макс. кол-во человек")
     short_desc = models.CharField(max_length=255, blank=True, null=True, verbose_name="Краткое описание")
 
     text = StreamField([
@@ -161,8 +159,6 @@ class TourPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel("image"),
         FieldPanel("price"),
-        FieldPanel("price_delta"),
-        FieldPanel("max_people"),
         FieldPanel("short_desc"),
         FieldPanel("text"),
         FieldPanel("photos"),
