@@ -175,7 +175,6 @@ class TourPage(Page):
             f"Новая бронь!\n"
             f"Тур: {self.title}\n"
             f"От: {booking_data['name']}\n"
-            f"Email: {booking_data['email']}\n"
             f"Телефон: {booking_data['phone']}\n"
             f"Количество гостей: {booking_data['guests']}\n"
             f"Стоимость: {booking_data['cost']}\n"

@@ -138,7 +138,14 @@
       bookFormSubmit.disabled = true;
       bookFormSubmitText.classList.add('hidden');
       bookFormSubmitLoader.classList.remove('hidden');
-      const apiUrl = `${window.location.origin}/api/booking/`;
+      const apiUrl = `${window.location.origin}/api/booking/`;console.log("API URL:", apiUrl);
+      console.log("Booking data:", {
+        page_id: pageId,
+        name: document.querySelector('#name').value,
+        phone: document.querySelector('#phone').value,
+        guests: count,
+        cost: totalPrice,
+      });
 
       try {
         const response = await fetch("/api/booking/",{
@@ -155,18 +162,15 @@
             cost: totalPrice,
           })
         });
-
         if (response.ok) {
           success = true;
           this.reset();
         } else {
           throw new Error('Ошибка сервера');
         }
-                    
       } catch (error) {
         console.error("Ошибка при отправке данных бронирования:", error);
         alert('Произошла ошибка при отправке. Пожалуйста, попробуйте позже.');
-
       } finally {
         bookFormSubmit.disabled = false;
         bookFormSubmitText.classList.remove('hidden');
