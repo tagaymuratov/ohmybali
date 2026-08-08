@@ -6,3 +6,10 @@ register = template.Library()
 @register.simple_tag
 def get_home_page_data():
     return HomePage.objects.live().first()
+
+@register.filter
+def space_thousands(value):
+    try:
+        return f"{int(value):,}".replace(",", " ")
+    except (ValueError, TypeError):
+        return value

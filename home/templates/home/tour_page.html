@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n wagtailcore_tags wagtailimages_tags%}
+{% load static i18n wagtailcore_tags wagtailimages_tags home_tags %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
@@ -12,7 +12,7 @@
       <img src="{{ img.url }}" alt="" class="w-full aspect-video object-cover rounded-xl">
     <div id="tour-info" class="flex flex-col gap-4" data-price="{{ page.price }}">
         <h1 class="text-3xl font-semibold">{{ page.title }}</h1>
-        <p id="price">Стоимость: {{ page.price }} IDR</p>
+        <p id="price">Стоимость: {{ page.price|space_thousands }} IDR</p>
         <div class="flex items-center justify-start">
           <span>Количество гостей</span>
           <div class="flex items-center space-x-4 ml-4">
@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <p id="modal-price" class="mt-4 font-medium">Стоимость: {{ page.price }} IDR</p>
+    <p id="modal-price" class="mt-4 font-medium">Стоимость: {{ page.price|space_thousands }} IDR</p>
 
     <button id="book-form-submit" type="submit" class="px-4 py-2 mt-4 rounded-lg text-primary bg-secondary border border-primary hover:bg-primary hover:text-secondary transition-all duration-300">
       <span id="book-form-submit-text" class="">Забронировать</span>
@@ -207,20 +207,9 @@
 
     function updatePrice() {
       totalPrice = tourPrice * count;
-      /*if(count == 6){
-        totalPrice = tourPrice + (tourPrice * .85) + (tourPrice * .85) + (tourPrice * .7) + (tourPrice * .6) + (tourPrice * .5);
-      }else if(count == 5){
-        totalPrice = tourPrice + (tourPrice * .85) + (tourPrice * .85) + (tourPrice * .7) + (tourPrice * .6);
-      }else if(count == 4){
-        totalPrice = tourPrice + (tourPrice * .85) + (tourPrice * .85) + (tourPrice * .7);
-      }else if(count == 3){
-        totalPrice = tourPrice + (tourPrice * .85) + (tourPrice * .85);
-      }else if(count == 2){
-        totalPrice = tourPrice + (tourPrice * .85);
-      }*/
-
-      price.textContent = `Стоимость: ${totalPrice} IDR`;
-      modalPrice.textContent = `Стоимость: ${totalPrice} IDR`;
+      priceText = totalPrice.toLocaleString('ru-RU');
+      price.textContent = `Стоимость: ${priceText} IDR`;
+      modalPrice.textContent = `Стоимость: ${priceText} IDR`;
     }
 
     function toggleModal() {
