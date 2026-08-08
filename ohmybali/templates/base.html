@@ -136,21 +136,21 @@
             <div class="flex flex-wrap gap-8">
                 <div>
                     <p>Founder of the business</p>
-                    <a href="mailto:a.klochkov@ohmybali.com" target="_blank" class="hover:text-primary">a.klochkov@ohmybali.com</a>
+                    <a href="mailto:{{ home_page.founder_mail }}" target="_blank" class="hover:text-primary">{{ home_page.founder_mail }}</a>
                 </div>
                 <div>
                     <p>Co-founder of the business</p>
-                    <a href="mailto:p.klochkova@ohmybali.com" target="_blank" class="hover:text-primary">p.klochkova@ohmybali.com</a>
+                    <a href="mailto:{{ home_page.co_founder_mail }}" target="_blank" class="hover:text-primary">{{ home_page.co_founder_mail }}</a>
                 </div>
                 <div>
                     <p>PT OHMYBALI DESTINATION MANAGEMENT</p>
-                    <p>NIB: 3110250104879</p>
+                    <p>NIB: {{ home_page.nib }}</p>
                 </div>
                 <div>
                     <a href="{% slugurl 'user-agreement' %}" class="hover:text-primary">Пользовательское соглашение</a>
                 </div>
                 <div>
-                    <p>Jalan Babakan Canggu Nomor 12, Desa/Kelurahan Canggu, Kec. Kuta Utara, Kab. Badung, Provinsi Bali, Kode Pos: 80351</p>
+                    <p>{{ home_page.address }}</p>
                 </div>
             </div>
         </footer>

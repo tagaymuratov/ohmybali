@@ -68,6 +68,11 @@ class HomePage(Page):
     whatsapp_link = models.URLField(blank=True, null=True)
     telegram_link = models.URLField(blank=True, null=True)
 
+    founder_mail = models.CharField(max_length=128, blank=True, null=True, verbose_name="Почта основателя")
+    co_founder_mail = models.CharField(max_length=128, blank=True, null=True, verbose_name="Почта сооснователя")
+    nib = models.CharField(max_length=128, blank=True, null=True, verbose_name="Третий блок")
+    address = models.CharField(max_length=255, blank=True, null=True, verbose_name="Адрес")
+
     content_panels = Page.content_panels + [
         MultiFieldPanel([
             FieldPanel("hero_image"),
@@ -94,6 +99,12 @@ class HomePage(Page):
             FieldPanel("whatsapp_link"),
             FieldPanel("telegram_link"),
         ], heading="Социальные сети"),
+        MultiFieldPanel([
+            FieldPanel("founder_mail"),
+            FieldPanel("co_founder_mail"),
+            FieldPanel("nib"),
+            FieldPanel("address"),
+        ], heading="Контакты"),
     ]
 
     def get_context(self, request):
