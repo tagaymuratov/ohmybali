@@ -206,8 +206,8 @@
     increaseBtn2.addEventListener('click', increaseGuests);
 
     function updatePrice() {
-      totalPrice = tourPrice;
-      if(count == 6){
+      totalPrice = tourPrice * count;
+      /*if(count == 6){
         totalPrice = tourPrice + (tourPrice * .85) + (tourPrice * .85) + (tourPrice * .7) + (tourPrice * .6) + (tourPrice * .5);
       }else if(count == 5){
         totalPrice = tourPrice + (tourPrice * .85) + (tourPrice * .85) + (tourPrice * .7) + (tourPrice * .6);
@@ -217,7 +217,7 @@
         totalPrice = tourPrice + (tourPrice * .85) + (tourPrice * .85);
       }else if(count == 2){
         totalPrice = tourPrice + (tourPrice * .85);
-      }
+      }*/
 
       price.textContent = `Стоимость: ${totalPrice} IDR`;
       modalPrice.textContent = `Стоимость: ${totalPrice} IDR`;
